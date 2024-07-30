@@ -6,64 +6,74 @@ import java.util.concurrent.TimeUnit;
 
 public class Reservation {
 	
-	private Integer numberRoom;
-	private Date checkin;
-	private Date checkout;
-
-	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private Integer roomNumber;
+	private Date checkIn;
+	private Date checkOut;
 	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	public Reservation() {
+		
 	}
 
-	public Reservation(Integer numberRoom, Date checkin, Date checkout) {
-		super();
-		this.numberRoom = numberRoom;
-		this.checkin = checkin;
-		checkout = checkout;
+	public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+		this.roomNumber = roomNumber;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
 	}
 
-	public Integer getNumberRoom() {
-		return numberRoom;
+	public Integer getRoomNumber() {
+		return roomNumber;
 	}
 
-	public void setNumberRoom(Integer numberRoom) {
-		this.numberRoom = numberRoom;
+	public void setRoomNumber(Integer roomNumber) {
+		this.roomNumber = roomNumber;
 	}
 
-	public Date getCheckin() {
-		return checkin;
+	public Date getCheckIn() {
+		return checkIn;
 	}
 
 //	public void setCheckin(Date checkin) {
 //		this.checkin = checkin;
 //	}
 
-	public Date getCheckout() {
-		return checkout;
+	public Date getCheckOut() {
+		return checkOut;
 	}
 
 //	public void setCheckout(Date checkout) {
-//		checkout = checkout;
+//		this.checkout = checkout;
 //	}
 	
 	public long duration() {
-		long diff = checkout.getTime() - checkin.getTime();
+		long diff = checkOut.getTime() - checkIn.getTime();
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 		
 	}
-	
-	public void updateDates(Date chekin, Date checkout) {
-		this.checkin = checkin;
-		this.checkout = checkout;
+	 
+	public String updateDates(Date checkIn, Date checkOut) {
+		
+		Date now = new Date();
+		 if (checkIn.before(now) || checkOut.before(now)) {
+			return "Reservation dates for update must be future dates";
+		 } 
+		 if (!checkOut.after(checkIn)) {
+			 return "Check-out date must be after check-in date";
+		 }
+		 this.checkIn = checkIn;
+		 this.checkOut = checkOut;
+		 
+		 return null;
 	}
-	
+
 	@Override
-	public String toString() {
-		return "ROOM: " + numberRoom
+	 public String toString() {
+		return "ROOM: " 
+				+ roomNumber
 				+ ", checkIn: "
-				+ sdf.format(checkin)
+				+ sdf.format(checkIn)
 				+ ", checkOut: "
-				+ sdf.format(checkout)
+				+sdf.format(checkOut)
 				+ ", "
 				+ duration()
 				+ "nights";
